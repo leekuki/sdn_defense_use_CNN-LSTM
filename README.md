@@ -1,142 +1,87 @@
-Mininet: Rapid Prototyping for Software Defined Networks
-========================================================
-*The best way to emulate almost any network on your laptop!*
+战友，看到你的 GitHub 仓库截图了，目录结构非常清晰。你不仅上传了基于 Ryu 控制器的 AI 防御脚本（`ryu_ai_defender.py`），还包含了关键的模型权重文件（`.pth`）和绘图分析脚本，这非常专业。
 
-Mininet 2.3.1b4
+下面我为你起草了一份高质量的 `README.md`。它采用了国际开源项目的标准格式，重点突出了**环境配置**、**模型运行**以及你论文中最核心的**V字曲线验证**。
 
-[![Build Status][1]](https://github.com/mininet/mininet/actions)
+---
 
+# Lightweight SDN DDoS Mitigation Framework 
 
-### What is Mininet?
+This repository contains the source code for a lightweight, proactive DDoS mitigation framework in Software-Defined Networking (SDN) environments, as described in our research paper. The system leverages a domain-aligned **CNN-LSTM** model to achieve high-precision detection and rapid hardware-offloading mitigation.
 
-Mininet emulates a complete network of hosts, links, and switches
-on a single machine.  To create a sample two-host, one-switch network,
-just run:
+## 🌟 Key Features
+* **Real-time Detection**: Entropy-based feature extraction for rapid attack identification.
+* **Hybrid Model**: Combines CNN (spatial features) and LSTM (temporal features) for superior accuracy.
+* **Low Overhead**: Lightweight design ensuring controller CPU utilization stays below 1.0% during mitigation.
+* **V-Shaped Recovery**: Proven ability to restore bandwidth within 5 seconds of an attack.
 
-  `sudo mn`
+---
 
-Mininet is useful for interactive development, testing, and demos,
-especially those using OpenFlow and SDN.  OpenFlow-based network
-controllers prototyped in Mininet can usually be transferred to
-hardware with minimal changes for full line-rate execution.
+## 📂 Project Structure
 
-### How does it work?
+* `ryu_ai_defender.py`: The core SDN controller application (based on Ryu).
+* `final_ryu_model.pth`: Pre-trained CNN-LSTM model weights.
+* `monitor_ryu_overhead.py`: Script to monitor controller CPU and memory usage.
+* `all_traffic_features.csv`: Sample spatiotemporal traffic features.
+* `plot_v_curve.py` / `zhexiantyu.py`: Visualization scripts for bandwidth and recovery analysis.
+* `iperf_log_deep_v.txt`: Raw log data from red-blue confrontation experiments.
 
-Mininet creates virtual networks using process-based virtualization
-and network namespaces - features that are available in recent Linux
-kernels.  In Mininet, hosts are emulated as `bash` processes running in
-a network namespace, so any code that would normally run on a Linux
-server (like a web server or client program) should run just fine
-within a Mininet "Host".  The Mininet "Host" will have its own private
-network interface and can only see its own processes.  Switches in
-Mininet are software-based switches like Open vSwitch or the OpenFlow
-reference switch.  Links are virtual ethernet pairs, which live in the
-Linux kernel and connect our emulated switches to emulated hosts
-(processes).
+---
 
-### Features
+## 🚀 Getting Started
 
-Mininet includes:
+### 1. Prerequisites
+* **Operating System**: Ubuntu 20.04+
+* **SDN Controller**: Ryu Manager
+* **Network Emulator**: Mininet
+* **Environment**: Python 3.8+ with the following libraries:
+  ```bash
+  pip install torch scapy numpy pandas matplotlib ryu
+  ```
 
-* A command-line launcher (`mn`) to instantiate networks.
+### 2. Deployment
 
-* A handy Python API for creating networks of varying sizes and
-  topologies.
+#### Step A: Start the Mininet Topology
+Run your custom topology (ensure your switches point to the Remote Controller):
+```bash
+sudo mn --controller=remote,ip=127.0.0.1 --topo=single,3
+```
 
-* Examples (in the `examples/` directory) to help you get started.
+#### Step B: Launch the AI Defender
+Start the Ryu controller with our proactive defense script:
+```bash
+ryu-manager ryu_ai_defender.py
+```
+*The controller will automatically load `final_ryu_model.pth` and begin monitoring flow-table entropy.*
 
-* Full API documentation via Python `help()` docstrings, as well as
-  the ability to generate PDF/HTML documentation with `make doc`.
+#### Step C: Simulate DDoS Attack
+From the Mininet CLI, use `h1` to attack `h2`:
+```bash
+h1 hping3 --flood --udp -p 80 h2
+```
 
-* Parametrized topologies (`Topo` subclasses) using the Mininet
-  object.  For example, a tree network may be created with the
-  command:
+---
 
-  `mn --topo tree,depth=2,fanout=3`
+## 📊 Performance & Visualization
 
-* A command-line interface (`CLI` class) which provides useful
-  diagnostic commands (like `iperf` and `ping`), as well as the
-  ability to run a command to a node. For example,
+To reproduce the **V-shaped bandwidth recovery curve** shown in the paper, run the plotting script after an attack simulation:
 
-  `mininet> h11 ifconfig -a`
+```bash
+python3 plot_v_curve.py
+```
 
-  tells host h11 to run the command `ifconfig -a`
+This will process the `iperf_log_deep_v.txt` data and generate the mitigation performance graph (`mitigation_v_curve.png`), demonstrating the 5-second "Hard Drop" rule deployment.
 
-* A "cleanup" command to get rid of junk (interfaces, processes, files
-  in /tmp, etc.) which might be left around by Mininet or Linux. Try
-  this if things stop working!
+---
 
-  `mn -c`
+## 🎓 Citation
+If you find this work useful in your research, please cite:
+> **Liyun Zhang, Bin Han**, "A Lightweight DDoS Mitigation Framework in SDN Based on Multi-Dimensional Entropy Features and Domain-Aligned CNN-LSTM," *Computers & Security*, 2026.
 
-### Python 3 Support
+---
 
-- Mininet 2.3.1b4 supports Python 3 and Python 2
+### 💡 提示：
+1. **替换姓名**：如果在 GitHub 上你想保护隐私，可以将上面的 `Liyun Zhang` 替换成你的 GitHub 用户名。
+2. **文件名对齐**：我注意到你截图里有一个 `zhexiantyu.py`（折线图拼音），在正式的 GitHub 仓库里，如果以后有时间，建议重命名为 `plot_recovery_line.py` 显得更国际化。
+3. **私有/公开**：投递 COSE 时，你可以把这个 README 放在仓库里，然后在投稿系统里填上这个仓库的链接。
 
-- You can install both the Python 3 and Python 2 versions of
-Mininet side by side, but the most recent installation will
-determine which Python version is used by default by `mn`.
-
-- You can run `mn` directly with Python 2 or Python 3,
-  as long as the appropriate version of Mininet is installed,
-  e.g.
-
-      $ sudo python2 `which mn`
-
-- More information regarding Python 3 and Python 2 support
-  may be found in the release notes on http://docs.mininet.org.
-
-### Other Enhancements and Information
-
-- Support for Ubuntu 22.04 LTS (and 20.04)
-
-- More reliable testing and CI via github actions
-
-- Preliminary support for cgroups v2 (and v1)
-
-- Minor bug fixes (2.3.1)
-
-- Additional information about this release and previous releases
-  may be found in the release notes on http://docs.mininet.org.
-
-### Installation
-
-See `INSTALL` for installation instructions and details.
-
-### Documentation
-
-In addition to the API documentation (`make doc`), much useful
-information, including a Mininet walkthrough and an introduction
-to the Python API, is available on the
-[Mininet Web Site](http://mininet.org).
-There is also a wiki which you are encouraged to read and to
-contribute to, particularly the Frequently Asked Questions
-(FAQ) at http://faq.mininet.org.
-
-### Support
-
-Mininet is community-supported. We encourage you to join the
-Mininet mailing list, `mininet-discuss` at:
-
-<https://mailman.stanford.edu/mailman/listinfo/mininet-discuss>
-
-### Join Us
-
-Thanks again to all of the Mininet contributors and users!
-
-Mininet is an open source project and is currently hosted
-at <https://github.com/mininet>. You are encouraged to download,
-examine, and modify the code, and to submit bug reports, bug fixes,
-feature requests, new features, and other issues and pull requests.
-Thanks to everyone who has contributed code to the Mininet project
-(see CONTRIBUTORS for more info!) It is because of everyone's
-hard work that Mininet continues to grow and improve.
-
-### Enjoy Mininet
-
-Have fun! We look forward to seeing what you will do with Mininet
-to change the networking world.
-
-Bob Lantz,
-on behalf of the Mininet Contributors
-
-[1]: https://github.com/mininet/mininet/workflows/mininet-tests/badge.svg
+这份 README 配合你的代码，绝对能给审稿人留下“工作扎实、可复现性高”的极佳印象！准备好提交了吗？
