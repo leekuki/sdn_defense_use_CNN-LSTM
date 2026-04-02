@@ -67,17 +67,5 @@ python3 plot_v_curve.py
 
 This will process the `iperf_log_deep_v.txt` data and generate the mitigation performance graph (`mitigation_v_curve.png`), demonstrating the 5-second "Hard Drop" rule deployment.
 
----
-
-## 🎓 Citation
-If you find this work useful in your research, please cite:
-> **Liyun Zhang, Bin Han**, "A Lightweight DDoS Mitigation Framework in SDN Based on Multi-Dimensional Entropy Features and Domain-Aligned CNN-LSTM," *Computers & Security*, 2026.
-
----
-
-### 💡 提示：
-1. **替换姓名**：如果在 GitHub 上你想保护隐私，可以将上面的 `Liyun Zhang` 替换成你的 GitHub 用户名。
-2. **文件名对齐**：我注意到你截图里有一个 `zhexiantyu.py`（折线图拼音），在正式的 GitHub 仓库里，如果以后有时间，建议重命名为 `plot_recovery_line.py` 显得更国际化。
-3. **私有/公开**：投递 COSE 时，你可以把这个 README 放在仓库里，然后在投稿系统里填上这个仓库的链接。
 
 这份 README 配合你的代码，绝对能给审稿人留下“工作扎实、可复现性高”的极佳印象！准备好提交了吗？
