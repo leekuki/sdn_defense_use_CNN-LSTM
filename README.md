@@ -65,7 +65,4 @@ To reproduce the **V-shaped bandwidth recovery curve** shown in the paper, run t
 python3 plot_v_curve.py
 ```
 
-This will process the `iperf_log_deep_v.txt` data and generate the mitigation performance graph (`mitigation_v_curve.png`), demonstrating the 5-second "Hard Drop" rule deployment.
 
-
-这份 README 配合你的代码，绝对能给审稿人留下“工作扎实、可复现性高”的极佳印象！准备好提交了吗？
